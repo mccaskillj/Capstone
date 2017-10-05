@@ -29,27 +29,31 @@ def findFrontRear(pic):
 
 def traceTop(filename):
     pic = Image.open(filename)
-    pic2 = Image.new(pic.mode, pic.size, "white")
+
+    topline = []
 
     front, rear = findFrontRear(pic)
-    print(front, rear)
+    topline.append(front)
 
     pos = 0
 
     while abs(front[0] - rear[0]) + abs(front[1] - rear[1]) > 10:
-        front, pos = nextPixel(pic, pos, front)
-        pic2.putpixel(front,0)
-
-    pic2.show()
+        front, pos = nextPixel(pic, pos, front, topline)
 
 
-def nextPixel(pic, start, curPos):
+
+
+
+def nextPixel(pic, start, curPos, topline):
     offsets = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
     positions = []
     for i in range(8):
         positions.append((offsets[i][0] + curPos[0], offsets[i][1] + curPos[1]))
+    vals = findNextPixel(pic, start, positions)
 
-    return findNextPixel(pic, start, positions)
+    topline.append(offsets[(vals[1] + 4) % 8])
+
+    return vals
 
 
 def findNextPixel(pic, start, positions):
