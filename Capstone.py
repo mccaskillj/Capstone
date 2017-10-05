@@ -29,7 +29,8 @@ def menu():
     if val == 1:
         verticalHist(argv[1])
     elif val == 2:
-        horizontalHist(argv[1])
+        hist = HHist(argv[1])
+        print(hist)
     elif val == 3:
         traceTop(argv[1])
     else:

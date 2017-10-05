@@ -41,14 +41,12 @@ def traceTop(filename):
         front, pos = nextPixel(pic, pos, front, topline)
 
 
-
-
-
 def nextPixel(pic, start, curPos, topline):
     offsets = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
     positions = []
     for i in range(8):
         positions.append((offsets[i][0] + curPos[0], offsets[i][1] + curPos[1]))
+
     vals = findNextPixel(pic, start, positions)
 
     topline.append(offsets[(vals[1] + 4) % 8])
@@ -60,4 +58,7 @@ def findNextPixel(pic, start, positions):
     for i in range(1, 9):
         if pic.getpixel(positions[(start+i) % 8]) < 100:
             return positions[(start+i) % 8], (start + i + 4) % 8
+
+    exit(0)
     return False
+
