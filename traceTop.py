@@ -3,8 +3,20 @@ from PIL import Image
 
 def traceTop(filename):
     pic = Image.open(filename)
+    pic2 = Image.new(pic.mode,pic.size,"white")
 
-    print(findFrontRear(pic))
+    front,rear = findFrontRear(pic)
+    print(front,rear)
+
+    pos = 0
+
+    while abs(front[0] - rear[0]) + abs(front[1] - rear[1]) > 10:
+        print(front, pos)
+        front, pos = nextPixel(pic, pos, front)
+        pic2.putpixel(front,0)
+
+    pic2.show()
+    #print(nextPixel(0,(1,1)))
 
 
 def findFrontRear(pic):
@@ -13,7 +25,7 @@ def findFrontRear(pic):
     for i in range(pic.size[0]):
         found = False
         for j in range(pic.size[1]):
-            if pic.getpixel((i, j)) < 100:
+            if pic.getpixel((i, j)) < 150:
                 found = (i,j)
                 break
         pos.append(found)
@@ -31,3 +43,19 @@ def findFrontRear(pic):
             break
 
     return front, rear
+
+
+def nextPixel(pic, start, curPos):
+    offsets = [(-1, 0), (-1, -1), (0, -1), (1, -1), (1, 0), (1, 1), (0, 1), (-1, 1)]
+    positions = []
+    for i in range(8):
+        positions.append((offsets[i][0] + curPos[0], offsets[i][1] + curPos[1]))
+
+    return findNextPixel(pic,start,positions)
+
+
+def findNextPixel(pic, start, positions):
+    for i in range(1, 9):
+        if pic.getpixel(positions[(start+i) % 8]) < 100:
+            return positions[(start+i) % 8], (start + i + 4) % 8
+    return False
