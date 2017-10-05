@@ -2,8 +2,6 @@ from PIL import Image
 
 pic1 = Image.open("Images/hello.png")
 
-print(pic1.size[0], pic1.size[1])
-
 hist = []
 
 for i in range(pic1.size[0]):
