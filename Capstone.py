@@ -1,6 +1,9 @@
 from sys import *
 from PIL import Image
 from traceTop import *
+from horizontalHist import *
+from verticalHist import *
+
 
 def main(argv):
     if len(argv) != 2:
@@ -24,9 +27,9 @@ def menu():
     val = int(val)
 
     if val == 1:
-        return 0
+        verticalHist(argv[1])
     elif val == 2:
-        return 0
+        horizontalHist(argv[1])
     elif val == 3:
         traceTop(argv[1])
     else:
