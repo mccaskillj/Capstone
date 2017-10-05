@@ -22,7 +22,7 @@ for i in range(pic2.size[0]):
         pic2.putpixel((i, j), 255)
 
 for i in range(len(hist)):
-    for j in range(int(2.5*hist[i])):
+    for j in range(hist[i]):
         pic2.putpixel((i, j), 0)
 
 pic1.show()
