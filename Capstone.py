@@ -27,12 +27,13 @@ def menu():
     val = int(val)
 
     if val == 1:
-        verticalHist(argv[1])
+        hist = VHist(argv[1])
+        print(hist)
     elif val == 2:
         hist = HHist(argv[1])
-        print(hist)
+        hist.generateHeight(60)
     elif val == 3:
-        traceTop(argv[1])
+        top = TopTrace(argv[1])
     else:
         return 0
 

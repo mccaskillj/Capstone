@@ -1,31 +1,54 @@
 from PIL import Image
 
 
-def verticalHist(filename):
-    pic1 = Image.open(filename)
-
+class VHist:
     hist = []
+    first = 0
+    last = 0
+    max = 0
 
-    for i in range(pic1.size[0]):
-        count = 0
-        for j in range(pic1.size[1]):
-            col = pic1.getpixel((i, j))
-            pic1.putpixel((i,j),col)
-            if col < 100:
-                count += 1
-        hist.append(count)
+    def __init__(self, filename):
+        pic = Image.open(filename)
 
-    print(hist)
+        for i in range(pic.size[0]):
+            count = 0
+            for j in range(pic.size[1]):
+                if pic.getpixel((i, j)) < 100:
+                    count += 1
+            self.hist.append(count)
+            if count > self.max:
+                self.max = count
 
-    pic2 = Image.new(pic1.mode,pic1.size)
+        for i in range(len(self.hist)):
+            if self.hist[i] > 0:
+                self.first = i
+                break
 
-    for i in range(pic2.size[0]):
-        for j in range(pic2.size[1]):
-            pic2.putpixel((i, j), 255)
+        for i in range(len(self.hist)-1,-1,-1):
+            if self.hist[i] > 0:
+                self.last = i
+                break
 
-    for i in range(len(hist)):
-        for j in range(hist[i]):
-            pic2.putpixel((i, j), 0)
+    def setFirst(self, first):
+        self.first =first
 
-    pic1.show()
-    pic2.show()
+    def getFirst(self):
+        return self.first
+
+    def setLast(self, last):
+        self.last = last
+
+    def getLast(self):
+        return self.last
+
+    def append(self, val):
+        self.hist.append(val)
+
+    def __repr__(self):
+        return str(self.first) + " " + str(self.last) +\
+               " " + str(self.max)+ " " + str(self.hist)
+
+
+
+
+

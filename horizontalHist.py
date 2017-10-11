@@ -6,6 +6,7 @@ class HHist:
     first = 0
     last = 0
     max = 0
+    height = 0
 
     def __init__(self, filename):
         pic = Image.open(filename)
@@ -47,3 +48,29 @@ class HHist:
     def __repr__(self):
         return str(self.first) + " " + str(self.last) +\
                " " + str(self.max)+ " " + str(self.hist)
+
+    def generateHeight(self, parts):
+        total = self.last - self.first
+        thresh = self.max / parts
+        heights = []
+        for j in range(parts):
+            data = []
+            for i in range(self.first-10,self.last+10,1):
+                if (self.hist[i]>thresh)!=(self.hist[i+1]>thresh):
+                    data.append(i)
+            thresh += self.max / parts
+            if len(data) > 2:
+                new = [0,0]
+                for i in range(0,len(data),2):
+                    if (data[i+1] - data[i]) > (new[1] - new[0]):
+                        new = [data[i],data[i+1]]
+                data = new
+            if data[1]-data[0] > int(total*0.70):
+                data = [0,0]
+            elif data[1] - data[0] < int(total*0.30):
+                data = [0,0]
+            heights.append(data[1] - data[0])
+        self.height = max(heights)
+
+    def getHeight(self):
+        return self.height
