@@ -13,6 +13,7 @@ class VHist:
         pic = Image.open(filename)
         self.filename = filename
 
+        print("Generating Histogram...")
         for i in range(pic.size[0]):
             count = 0
             for j in range(pic.size[1]):
@@ -31,6 +32,8 @@ class VHist:
             if self.hist[i] > 0:
                 self.last = i
                 break
+
+        print("Generating Histogram...Complete")
 
     def setFirst(self, first):
         self.first =first
@@ -58,6 +61,7 @@ class VHist:
                " " + str(self.max)+ " " + str(self.hist)
 
     def findBreaks(self, percent):
+        print("Finding Segmentation Points...Threshold = " +str(percent)+ "%")
         thresh = self.max * percent // 100
         pivots = []
         for i in range(len(self.hist)-2):
@@ -70,13 +74,10 @@ class VHist:
             self.breaks.append((pivots[i]+pivots[i+1])//2)
 
         self.breaks.append((pivots[-1] + self.last) // 2)
+        print("Finding Segmentation Points...Complete")
 
     def showBreaks(self):
         pic = Image.open(self.filename)
         for i in range(len(self.breaks)):
             for j in range(pic.size[1]):
-                pic.putpixel((self.breaks[i],j), 0)
-        pic.show()
-
-
-
+                pic.putpixel((self.breaks[i], j), 0)

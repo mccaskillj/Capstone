@@ -3,6 +3,7 @@ from PIL import Image
 from traceTop import *
 from horizontalHist import *
 from verticalHist import *
+from segmenter import *
 
 
 def main(argv):
@@ -30,6 +31,8 @@ def menu():
         hist = VHist(argv[1])
         hist.findBreaks(20)
         hist.showBreaks()
+        seg = Segmenter(hist)
+        print(seg.segment())
     elif val == 2:
         hist = HHist(argv[1])
         hist.generateHeight(60)
