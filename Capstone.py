@@ -28,7 +28,8 @@ def menu():
 
     if val == 1:
         hist = VHist(argv[1])
-        print(hist)
+        hist.findBreaks(20)
+        hist.showBreaks()
     elif val == 2:
         hist = HHist(argv[1])
         hist.generateHeight(60)
