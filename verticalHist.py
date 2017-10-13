@@ -1,4 +1,5 @@
 from PIL import Image
+from horizontalHist import *
 
 
 class VHist:
@@ -8,12 +9,20 @@ class VHist:
     max = 0
     breaks = []
     filename = ""
+    verbose = 0
+    height = 0
 
-    def __init__(self, filename):
-        pic = Image.open(filename)
-        self.filename = filename
+    def __init__(self, results):
+        pic = Image.open(results.filename)
+        self.filename = results.filename
+        self.verbose = results.v
 
-        print("Generating Histogram...")
+        hist = HHist(results)
+        hist.generateHeight(10)
+        self.height = hist.getHeight()
+
+        if self.verbose > 0:
+            print("Generating Histogram...")
         for i in range(pic.size[0]):
             count = 0
             for j in range(pic.size[1]):
@@ -33,7 +42,8 @@ class VHist:
                 self.last = i
                 break
 
-        print("Generating Histogram...Complete")
+        if self.verbose > 0:
+            print("Generating Histogram...Complete")
 
     def setFirst(self, first):
         self.first =first
@@ -56,12 +66,22 @@ class VHist:
     def append(self, val):
         self.hist.append(val)
 
+    def getMax(self):
+        return self.max
+
+    def getVerbose(self):
+        return self.verbose
+
+    def getHeight(self):
+        return self.height
+
     def __repr__(self):
         return str(self.first) + " " + str(self.last) +\
                " " + str(self.max)+ " " + str(self.hist)
 
     def findBreaks(self, percent):
-        print("Finding Segmentation Points...Threshold = " +str(percent)+ "%")
+        if self.verbose > 0:
+            print("Finding Segmentation Points...Threshold = " +str(percent)+ "%")
         thresh = self.max * percent // 100
         pivots = []
         for i in range(len(self.hist)-2):
@@ -74,10 +94,12 @@ class VHist:
             self.breaks.append((pivots[i]+pivots[i+1])//2)
 
         self.breaks.append((pivots[-1] + self.last) // 2)
-        print("Finding Segmentation Points...Complete")
+        if self.verbose > 0:
+            print("Finding Segmentation Points...Complete")
 
     def showBreaks(self):
         pic = Image.open(self.filename)
         for i in range(len(self.breaks)):
             for j in range(pic.size[1]):
                 pic.putpixel((self.breaks[i], j), 0)
+        pic.show()

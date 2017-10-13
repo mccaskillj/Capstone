@@ -1,15 +1,16 @@
 from PIL import Image
 
-
 class HHist:
     hist = []
     first = 0
     last = 0
     max = 0
     height = 0
+    filename = ""
 
-    def __init__(self, filename):
-        pic = Image.open(filename)
+    def __init__(self, results):
+        pic = Image.open(results.filename)
+        self.filename = results.filename
 
         for i in range(pic.size[1]):
             count = 0
@@ -48,6 +49,18 @@ class HHist:
     def __repr__(self):
         return str(self.first) + " " + str(self.last) +\
                " " + str(self.max)+ " " + str(self.hist)
+
+    def showHist(self):
+        pic = Image.open(self.filename)
+        pic.show()
+        pic2 = Image.new(pic.mode, pic.size, "white")
+
+        for i in range(len(self.hist)):
+            for j in range(self.hist[i]):
+                pic2.putpixel((j,i),0)
+
+        pic2.show()
+
 
     def generateHeight(self, parts):
         total = self.last - self.first

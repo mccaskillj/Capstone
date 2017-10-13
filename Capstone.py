@@ -4,22 +4,25 @@ from traceTop import *
 from horizontalHist import *
 from verticalHist import *
 from segmenter import *
+import argparse
 
 
 def main(argv):
-    if len(argv) != 2:
-        print("usage:",argv[0], "filename")
-        return 0;
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename', action="store", help='Input image name')
+    parser.add_argument('-v', action='count', default=0, help='Enable verbose')
+    parser.add_argument('-t', action='store', type=int, default=20, help='Threshold for vertical hist')
+    results = parser.parse_args()
     try:
-        Image.open(argv[1])
+        Image.open(results.filename)
     except:
         print("file \"" + argv[1] + "\" not found")
         return 0
 
-    menu()
+    menu(results)
 
 
-def menu():
+def menu(results):
     val = menuItems()
     while checkChoice(val):
         print()
@@ -28,16 +31,20 @@ def menu():
     val = int(val)
 
     if val == 1:
-        hist = VHist(argv[1])
-        hist.findBreaks(20)
-        hist.showBreaks()
+        hist = VHist(results)
+        hist.findBreaks(results.t)
+        if results.v > 1:
+            hist.showBreaks()
+        print(hist.getMax())
         seg = Segmenter(hist)
-        print(seg.segment())
+        print seg.segmentNew()
     elif val == 2:
-        hist = HHist(argv[1])
-        hist.generateHeight(60)
+        hist = HHist(results)
+        hist.showHist()
+        hist.generateHeight(10)
+        print(hist.getHeight())
     elif val == 3:
-        top = TopTrace(argv[1])
+        top = TopTrace(results)
     else:
         return 0
 

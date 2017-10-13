@@ -6,8 +6,8 @@ class TopTrace:
     last = (0, 0)
     path = []
 
-    def __init__(self, filename):
-        pic = Image.open(filename)
+    def __init__(self, results):
+        pic = Image.open(results.filename)
         self.findFrontRear(pic)
         self.traceTop(pic)
 
