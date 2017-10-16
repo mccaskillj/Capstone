@@ -7,10 +7,15 @@ class HHist:
     max = 0
     height = 0
     filename = ""
+    verbose = 0
 
     def __init__(self, results):
         pic = Image.open(results.filename)
         self.filename = results.filename
+        self.verbose = results.v
+
+        if self.verbose > 0:
+            print("Generating horizontal histogram...")
 
         for i in range(pic.size[1]):
             count = 0
@@ -30,6 +35,9 @@ class HHist:
             if self.hist[i] > 0:
                 self.last = i
                 break
+
+        if self.verbose > 0:
+            print("Generating horizontal histogram...Complete")
 
     def setFirst(self, first):
         self.first =first
@@ -63,6 +71,8 @@ class HHist:
 
 
     def generateHeight(self, parts):
+        if self.verbose > 0:
+            print("Generating base letter height...")
         total = self.last - self.first
         thresh = self.max / parts
         heights = []
@@ -84,6 +94,9 @@ class HHist:
                 data = [0,0]
             heights.append(data[1] - data[0])
         self.height = max(heights)
+
+        if self.verbose > 0:
+            print("Generating base letter height...Complete")
 
     def getHeight(self):
         return self.height
