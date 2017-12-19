@@ -11,11 +11,13 @@ class VHist:
     filename = ""
     verbose = 0
     height = 0
+    threshold = 0
 
     def __init__(self, results):
         pic = Image.open(results.filename)
         self.filename = results.filename
         self.verbose = results.v
+        self.threshold = results.t
 
         hist = HHist(results)
         hist.generateHeight(10)
@@ -41,6 +43,14 @@ class VHist:
             if self.hist[i] > 0:
                 self.last = i
                 break
+
+        if self.verbose > 2:
+            pic2 = Image.new(pic.mode,pic.size,"white")
+            for i in range(len(self.hist)):
+                for j in range(self.hist[i]):
+                    pic2.putpixel((i,pic.size[1]-1-j),0)
+                #pic2.putpixel((i,pic.size[1]-1-(self.max * self.threshold // 100)),0)
+            pic2.show()
 
         if self.verbose > 0:
             print("Generating Histogram...Complete")
@@ -74,6 +84,9 @@ class VHist:
 
     def getHeight(self):
         return self.height
+
+    def getNumBreaks(self):
+        return len(self.breaks)
 
     def __repr__(self):
         return str(self.first) + " " + str(self.last) +\
